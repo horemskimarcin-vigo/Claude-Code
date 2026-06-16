@@ -51,7 +51,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const classes = cn(buttonVariants({ variant, size }), className);
 
     if (props.asChild) {
-      const child = React.Children.only(props.children);
+      const childArray = React.Children.toArray(props.children).filter(
+        React.isValidElement,
+      ) as React.ReactElement<{ className?: string }>[];
+      const child = childArray[0];
+      if (!child) return null;
       return React.cloneElement(child, {
         className: cn(child.props.className, classes),
       });
